@@ -1,0 +1,16 @@
+{
+    "canisters": {
+      "block": {
+        "type": "custom",
+        "candid": "./block.did",
+        "wasm": "target/wasm32-unknown-unknown/release/opt.wasm"
+      }
+    },
+    "networks": {
+      "local": {
+        "bind": "127.0.0.1:8000",
+        "type": "ephemeral"
+      }
+    },
+    "version": 1
+}
