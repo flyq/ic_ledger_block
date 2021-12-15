@@ -9,6 +9,7 @@ type Operation = variant {
   Mint : record { to : text; amount : Tokens };
   Transfer : record { to : text; fee : Tokens; from : text; amount : Tokens };
 };
+type Result = variant { Ok : Block; Err : text };
 type TimeStamp = record { timestamp_nanos : nat64 };
 type Tokens = record { e8s : nat64 };
 type Transaction = record {
@@ -16,4 +17,4 @@ type Transaction = record {
   operation : Operation;
   created_at_time : TimeStamp;
 };
-service : { mint : (nat64) -> (Block) }
+service : { block : (nat64) -> (Result) }
