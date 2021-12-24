@@ -22,7 +22,24 @@ async fn block(block_height: BlockHeight) -> Result<Block, String> {
                 Some(result_encode_block) => {
                     match result_encode_block {
                         Ok(encode_block) => encode_block,
-                        Err(e) => return Err(format!("res encode block error {}", e)),
+                        Err(e) => {
+                            let response: Result<BlockRes, (Option<i32>, String)> =
+                                call_with_cleanup(e, "get_block_pb", protobuf, block_height).await;
+                            match response {
+                                Ok(BlockRes(res)) => {
+                                    match res {
+                                        Some(result_encode_block) => {
+                                            match result_encode_block {
+                                                Ok(encode_block) => encode_block,
+                                                Err(e) => return Err(format!("result_encode_block error again {}", e)),
+                                            }
+                                        },
+                                        None => return Err(format!("res none error again")),
+                                    }
+                                },
+                                Err(e) => return Err(format!("response error again {}", e.1)),
+                            }
+                        },
                     }
                 },
                 None => return Err(format!("res none error")),
